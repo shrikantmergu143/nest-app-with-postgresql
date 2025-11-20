@@ -1,0 +1,44 @@
+Code format
+
+npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-prettier
+
+.prettierrc
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "semi": true,
+  "printWidth": 100,
+  "endOfLine": "auto"
+}
+
+.prettierignore
+node_modules
+dist
+package-lock.json
+
+.eslintrc.js
+
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
+  plugins: ['@typescript-eslint/eslint-plugin', 'prettier'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
+  root: true,
+  env: {
+    node: true,
+    jest: true,
+  },
+  rules: {
+    'prettier/prettier': ['error'],
+  },
+};
+
+npm install --save-dev eslint typescript-eslint eslint-config-prettier
