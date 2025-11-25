@@ -3,10 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
 import database from 'config/database';
 import { validationSchema } from 'config/validation';
 import { configuration } from 'config/configuration';
+import { UsersModule } from './users/auth.module';
 
 @Module({
   imports: [

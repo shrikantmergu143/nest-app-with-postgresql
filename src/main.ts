@@ -22,13 +22,12 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  // app.enableCors();
   app.enable('trust proxy', true);
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove fields not in DTO
-      forbidNonWhitelisted: true, // throw error if extra fields sent
-      transform: true, // auto-transform types (e.g., string → date)
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
   await app.listen(+port);

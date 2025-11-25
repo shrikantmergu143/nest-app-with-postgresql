@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/shared/entity/base.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,20 +9,19 @@ import {
 } from 'typeorm';
 
 @Entity('users')
-export class Users {
+export class Users extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ nullable: true })
+  @Column({ type: 'character varying', nullable: true })
   name?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'character varying', nullable: true })
   frist_name?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'character varying', nullable: true })
   last_name?: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'character varying', unique: true })
   email: string;
 
   @Column()
@@ -37,7 +37,6 @@ export class Users {
     type: 'enum',
     enum: ['admin', 'user', 'employee'],
   })
-
   user_type: 'admin' | 'user' | 'employee';
 
   @Column({
@@ -75,15 +74,6 @@ export class Users {
 
   @Column({ default: false })
   is_deactivete?: boolean;
-
-  @DeleteDateColumn({ nullable: true })
-  deleted_at?: Date;
-
-  @UpdateDateColumn({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
-  updated_at?: Date;
-
-  @CreateDateColumn({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
-  created_at?: Date;
 
   @Column({ nullable: true })
   present_address: string;
