@@ -4,11 +4,14 @@ import helmet from 'helmet';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { urlencoded, json } from 'express';
 import { ValidationPipe } from '@nestjs/common';
+import { loggerMiddleware } from './middleware/logger/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const port = process.env.PORT || 4008;
   const AllowedURL = process.env.ALLOW_WEBSITE_URLS.split(',');
+  app.use(loggerMiddleware);
+
   app.use(
     helmet({
       contentSecurityPolicy: false,

@@ -1,11 +1,16 @@
 const SUCCESS = {
   DEFAULT: 'Your request is successfully executed',
+  COMPLETE_VERIFICATION: (type: string) =>
+    `OTP Sent to your contact, Please complete ${type} OTP verification`,
 };
 const ERROR = {
   INTERNAL_SERVER_ERROR: 'Internal server error occurred',
   METHOD_NOT_ALLOWED: 'The method is not allowed',
   ALREADY_EXISTS: (entity: string) => `${entity} already exists`,
   VALIDATION: 'Validation Error!',
+};
+export const MESSAGE = {
+  USER_ALREADY_EXIST: 'User already exist',
 };
 const VALIDATION = {};
 const EMAIL = {};
@@ -14,6 +19,7 @@ export const CONSTANT = {
   VALIDATION: VALIDATION,
   ERROR: ERROR,
   EMAIL: EMAIL,
+  MESSAGE: MESSAGE,
 };
 
 export declare enum RequestMethod {

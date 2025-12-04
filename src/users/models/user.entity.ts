@@ -35,12 +35,14 @@ export class Users extends BaseEntity {
 
   @Column({
     type: 'enum',
+    default: 'employee',
     enum: ['admin', 'user', 'employee'],
   })
   user_type: 'admin' | 'user' | 'employee';
 
   @Column({
     type: 'enum',
+    default: 'Permanent',
     enum: ['Permanent', 'Contract'],
     nullable: true,
   })
