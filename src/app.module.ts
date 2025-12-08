@@ -8,6 +8,7 @@ import { validationSchema } from 'config/validation';
 import { configuration } from 'config/configuration';
 import { UsersModule } from './users/auth.module';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
+import { CallGateway } from './call.gateway';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CallGateway],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
