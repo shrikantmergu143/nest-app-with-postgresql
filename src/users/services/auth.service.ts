@@ -21,4 +21,7 @@ export class UsersService {
   update(id: string, data: Partial<Users>): Promise<any> {
     return this.usersRepository.update(id, data);
   }
+  delete(id: string): Promise<any> {
+    return this.usersRepository.delete(id);
+  }
 }

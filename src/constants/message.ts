@@ -2,8 +2,10 @@ const SUCCESS = {
   DEFAULT: 'Your request is successfully executed',
   COMPLETE_VERIFICATION: (type: string) =>
     `OTP Sent to your contact, Please complete ${type} OTP verification`,
+  DELETE: (type: string) => `${type} deleted successfully`,
 };
 const ERROR = {
+  NOT_FOUND: (type: string) => `${type} not found`,
   INTERNAL_SERVER_ERROR: 'Internal server error occurred',
   METHOD_NOT_ALLOWED: 'The method is not allowed',
   ALREADY_EXISTS: (entity: string) => `${entity} already exists`,
