@@ -10,6 +10,8 @@ import { UsersModule } from './users/auth.module';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import { CallGateway } from './call.gateway';
 import { AdminModule } from './admin/admin.module';
+import { DiscoveryModule } from '@nestjs/core';
+import { ApiDocsModule } from './shared/services/api.docs.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { AdminModule } from './admin/admin.module';
     }),
     UsersModule,
     AdminModule,
+    DiscoveryModule,
+    ApiDocsModule,
   ],
   controllers: [AppController],
   providers: [AppService, CallGateway],

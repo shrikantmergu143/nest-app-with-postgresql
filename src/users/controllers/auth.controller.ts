@@ -16,6 +16,7 @@ import { LoginAdminDto } from '../models/admin-login.dto';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { compareHash } from 'src/constants/utils';
 import * as jwt from 'jsonwebtoken';
+import { ApiDoc } from 'src/shared/decorators/api-doc.decorator';
 
 @Controller('auth')
 export class UsersController {
@@ -60,6 +61,19 @@ export class UsersController {
     }
   }
   @Post('login/admin')
+  @ApiDoc({
+    description: 'Login Admin',
+    body: {
+      email: 'string',
+      password: 'string',
+      device_id: 'string',
+      device_type: 'string',
+    },
+    response: {
+      id: 'uuid',
+      email: 'string',
+    },
+  })
   async adminLogin(@Body() loginAdminDto: LoginAdminDto, @Res() res: Response) {
     try {
       const adminResponse = await this.adminRepository.findOne({
