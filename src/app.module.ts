@@ -9,6 +9,7 @@ import { configuration } from 'config/configuration';
 import { UsersModule } from './users/auth.module';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import { CallGateway } from './call.gateway';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CallGateway } from './call.gateway';
       inject: [ConfigService],
     }),
     UsersModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService, CallGateway],

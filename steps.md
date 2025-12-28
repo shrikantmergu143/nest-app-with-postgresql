@@ -21,3 +21,6 @@ nest g controller company
 
 # Middleware Create
 nest g middleware middleware/_name
+
+GENERATE resource using resource name
+nest g resource admin

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-unsafe-optional-chaining */
 import { Body, Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
 import { CreateUserDto } from '../models/create-user.dto';
@@ -8,6 +12,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../models/user.entity';
 import { Repository } from 'typeorm';
 import { CONSTANT, MESSAGE } from 'src/constants/message';
+import { LoginAdminDto } from '../models/admin-login.dto';
+import { Admin } from 'src/admin/entities/admin.entity';
+import { compareHash } from 'src/constants/utils';
+import * as jwt from 'jsonwebtoken';
 
 @Controller('auth')
 export class UsersController {
@@ -15,7 +23,15 @@ export class UsersController {
     private usersService: UsersService,
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
+
+    @InjectRepository(Admin)
+    private readonly adminRepository: Repository<Admin>,
   ) {}
+  generateToken = (id, table) => {
+    return jwt.sign({ id, table }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '365d',
+    });
+  };
   @Post('signup/user')
   async signUp(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
@@ -43,6 +59,55 @@ export class UsersController {
       return response.failureResponse(error, res);
     }
   }
+  @Post('login/admin')
+  async adminLogin(@Body() loginAdminDto: LoginAdminDto, @Res() res: Response) {
+    try {
+      const adminResponse = await this.adminRepository.findOne({
+        where: { email: loginAdminDto.email },
+        select: [
+          'id',
+          'email',
+          'password',
+          'first_name',
+          'last_name',
+          'created_at',
+          'updated_at',
+        ],
+      });
+      if (!adminResponse) {
+        return response.badRequest(
+          { message: MESSAGE.WRONG_CREDENTIALS, data: {} },
+          res,
+        );
+      }
+      const comparePassword = await compareHash(
+        loginAdminDto?.password,
+        adminResponse?.password,
+      );
+      if (!comparePassword) {
+        return response.badRequest(
+          { message: MESSAGE.WRONG_CREDENTIALS, data: {} },
+          res,
+        );
+      }
+      const token = this.generateToken(adminResponse?.id, 'admin');
+      response.successResponse(
+        {
+          data: {
+            id: adminResponse?.id,
+            email: adminResponse?.email,
+            first_name: adminResponse?.first_name,
+            last_name: adminResponse?.last_name,
+            token: token,
+          },
+          message: CONSTANT.SUCCESS.DEFAULT,
+        },
+        res,
+      );
+    } catch (error) {
+      return response.failureResponse(error, res);
+    }
+  }
   @Get('user/get')
   async getUser(@Req() user: Request, @Res() res: Response) {
     const result = await this.usersService.findAll();
@@ -59,7 +124,6 @@ export class UsersController {
     const { id } = req?.params;
     try {
       const result = await this?.usersRepository?.delete(id);
-      console.log('result', result);
       if (result?.affected) {
         return response?.successResponse(
           {

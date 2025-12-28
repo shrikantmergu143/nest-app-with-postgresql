@@ -30,3 +30,11 @@ CREATE TABLE users (
 
 Records enserted
 https://www.canva.com/design/DAGQjSCN04I/5E1IRUJHAxJyV0O5G36rnw/edit
+
+1. Check Constraints
+ create table vendor_products (
+    id serial primary key,
+    name varchar(100) not null,
+    price numeric (10, 2) check (price > 0),
+    stock int check (stock >= 0),
+ );

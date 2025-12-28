@@ -10,9 +10,10 @@ import { Users } from './models/user.entity';
 import validationMiddleware from 'src/middleware/validation/validation-middleware';
 import { userCreateSchema } from './models/sign.validation';
 import { UsersService } from './services/auth.service';
+import { Admin } from 'src/admin/entities/admin.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users])],
+  imports: [TypeOrmModule.forFeature([Users, Admin])],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

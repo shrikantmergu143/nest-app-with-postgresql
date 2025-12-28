@@ -1,17 +1,20 @@
-import { HttpStatus } from "@nestjs/common";
-import { CONSTANT } from "./message";
-import { Response } from "express";
-import { createLogger, format, transports } from "winston";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { HttpStatus } from '@nestjs/common';
+import { CONSTANT } from './message';
+import { Response } from 'express';
+import { createLogger, format, transports } from 'winston';
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
 const logger = createLogger({
   // To see more detailed errors, change this to 'debug'
-  level: "info",
+  level: 'info',
   format: format.combine(format.splat(), format.simple()),
   transports: [
     new transports.Console(),
     new transports.File({
-      filename: `logs/logfile-${new Date().toLocaleDateString("es-CL")}.log`,
+      filename: `logs/logfile-${new Date().toLocaleDateString('es-CL')}.log`,
     }),
   ],
 });
@@ -34,17 +37,17 @@ const failureResponse = (error: any, res: Response) => {
   if (
     error.name &&
     [
-      "Error",
-      "TypeError",
-      "TypeORMError",
-      "QueryFailedError",
-      "EntityPropertyNotFoundError",
+      'Error',
+      'TypeError',
+      'TypeORMError',
+      'QueryFailedError',
+      'EntityPropertyNotFoundError',
     ].includes(error.name)
   ) {
-    logger.error(`${new Date().toLocaleString("es-CL")} ${error.message}`);
-    if (error.code && ["23505"].includes(error.code)) {
+    logger.error(`${new Date().toLocaleString('es-CL')} ${error.message}`);
+    if (error.code && ['23505'].includes(error.code)) {
       httpStatus = HttpStatus.BAD_REQUEST;
-      error.message = CONSTANT.ERROR.ALREADY_EXISTS("Record");
+      error.message = CONSTANT.ERROR.ALREADY_EXISTS('Record');
     } else {
       error.message = CONSTANT.ERROR.METHOD_NOT_ALLOWED;
     }
@@ -71,10 +74,17 @@ const errorResponse = (data: Data, res: Response) => {
     data: data.data,
   });
 };
+const badRequest = (data: Data, res: Response) =>
+  res.status(HttpStatus.BAD_REQUEST).json({
+    status: 0,
+    message: data.message ? data.message : CONSTANT.ERROR.BAD_SYNTAX,
+    data: data.data,
+  });
 const response = {
   successResponse,
   failureResponse,
   errorResponse,
   validationError,
+  badRequest,
 };
 export default response;

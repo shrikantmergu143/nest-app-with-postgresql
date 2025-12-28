@@ -10,9 +10,11 @@ const ERROR = {
   METHOD_NOT_ALLOWED: 'The method is not allowed',
   ALREADY_EXISTS: (entity: string) => `${entity} already exists`,
   VALIDATION: 'Validation Error!',
+  BAD_SYNTAX: 'Invalid request syntax detected.',
 };
 export const MESSAGE = {
   USER_ALREADY_EXIST: 'User already exist',
+  WRONG_CREDENTIALS: 'Wrong Credentials.',
 };
 const VALIDATION = {};
 const EMAIL = {};
