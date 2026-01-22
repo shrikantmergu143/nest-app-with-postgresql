@@ -5,6 +5,7 @@
 import { Injectable, RequestMethod } from '@nestjs/common';
 import { DiscoveryService, Reflector } from '@nestjs/core';
 import { API_DOC_KEY } from '../decorators/api-doc.decorator';
+import { API_DOCS_CONSTANT } from './api-docs.constant';
 
 @Injectable()
 export class ApiDocsService {
@@ -50,5 +51,8 @@ export class ApiDocsService {
     }
 
     return docs;
+  }
+  getApiDocs() {
+    return API_DOCS_CONSTANT;
   }
 }

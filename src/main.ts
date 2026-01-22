@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { urlencoded, json } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { loggerMiddleware } from './middleware/logger/logger.middleware';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
     }),
   );
   app.use(json({ limit: '50mb' }));
+  app.setViewEngine('pug');
+  app.setBaseViewsDir(join(__dirname, '../..', 'views'));
   app.use(urlencoded({ extended: true, limit: '50mb', parameterLimit: 50000 }));
   app.setGlobalPrefix('api');
   app.enableCors({
@@ -35,4 +38,4 @@ async function bootstrap() {
   );
   await app.listen(+port);
 }
-bootstrap();
+void bootstrap();

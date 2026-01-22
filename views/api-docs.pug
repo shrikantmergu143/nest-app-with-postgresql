@@ -1,0 +1,336 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title || "API Tester Pro"
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet")
+    style.
+      body {
+        font-family: 'Inter', Arial, sans-serif;
+        padding: 20px;
+        background: #f3f4f6;
+        margin: 0;
+        color: #1f2937;
+      }
+      h1 { margin-bottom: 24px; font-weight: 600; font-size: 28px; }
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+      h2 { margin-top: 0; font-size: 20px; font-weight: 600; }
+
+      /* API List */
+      .search-box {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        margin-bottom: 16px;
+        font-size: 15px;
+      }
+      .api-item {
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .api-item:hover { background: #f9fafb; border-color: #bbc3cd; }
+      .api-item.active { border-color: #2563eb; background: #eff6ff; }
+      .method {
+        display: inline-block;
+        width: 64px;
+        text-align: center;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 12px;
+        color: white;
+        margin-right: 12px;
+      }
+      .method.GET { background: #10b981; }
+      .method.POST { background: #3b82f6; }
+      .method.PUT { background: #f59e0b; }
+      .method.PATCH { background: #8b5cf6; }
+      .method.DELETE { background: #ef4444; }
+      .api-header { font-weight: 600; font-size: 15px; }
+      .api-desc { color: #4b5563; margin: 6px 0; font-size: 14px; }
+      .api-details {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #d1d5db;
+        font-size: 13px;
+        display: none;
+      }
+      .api-item.active .api-details { display: block; }
+      .api-details pre {
+        background: #1e293b;
+        color: #e5e7eb;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        overflow: auto;
+        margin: 8px 0 0;
+      }
+
+      /* Tester */
+      .row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        align-items: center;
+      }
+      .row.full { width: 100%; }
+      input, select, textarea {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+        flex: 1;
+      }
+      select, input[type="text"], input[type="password"] { height: 44px; }
+      textarea {
+        min-height: 130px;
+        font-family: 'Courier New', monospace;
+        resize: vertical;
+      }
+      button {
+        padding: 10px 20px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      button:hover { background: #1d4ed8; }
+      button.secondary { background: #6b7280; }
+      button.secondary:hover { background: #4b5563; }
+      button.remove-param {
+        background: #ef4444;
+        padding: 0 12px;
+        width: 40px;
+      }
+
+      .query-params { margin-bottom: 20px; }
+      .param-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      pre#tester-response {
+        background: #111827;
+        color: #e5e7eb;
+        padding: 16px;
+        border-radius: 10px;
+        min-height: 100px;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+      .curl-box {
+        background: #1e293b;
+        color: #94a3b8;
+        padding: 14px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 13px;
+        margin-top: 12px;
+        word-break: break-all;
+        display: none;
+      }
+      .hint { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+
+  body
+    h1 🚀 API Tester Pro
+
+    .layout
+      // ================= API LIST =================
+      .card
+        h2 📘 APIs
+        p.hint Click an API to load it • Click again to toggle details
+        input.search-box(type="text" id="api-search" placeholder="🔍 Search APIs..." oninput="filterApis()")
+        #api-list
+
+      // ================= API TESTER =================
+      .card
+        h2 🧪 API Tester
+
+        .row
+          select#tester-method
+            option GET
+            option POST
+            option PUT
+            option PATCH
+            option DELETE
+          input#tester-url(type="text" placeholder="https://api.example.com/v1/users")
+
+        .row
+          select#auth-type(onchange="toggleAuth()")
+            option(value="none") No Auth
+            option(value="bearer") Bearer Token
+            option(value="basic") Basic Auth
+          input#tester-token(type="text" placeholder="Bearer xyz123..." style="display:none;")
+          input#basic-username(type="text" placeholder="Username" style="display:none; flex:0.5;")
+          input#basic-password(type="password" placeholder="Password" style="display:none; flex:0.5;")
+
+        .query-params
+          strong Query Parameters
+          #query-params-container
+          button(type="button" onclick="addQueryParam()") + Add Param
+
+        textarea#tester-headers(placeholder=`Headers (JSON)\n{\n  "Content-Type": "application/json"\n}`)
+        textarea#tester-body(placeholder=`Request Body (JSON)\n{\n  "name": "John Doe"\n}`)
+
+        .row.full(style="margin-top:20px;")
+          button(onclick="runApiTester()") 🚀 Send Request
+          button.secondary(onclick="copyCurl()") 📋 Copy cURL
+
+        div.curl-box#curl-command
+
+        h3 Response
+        pre#tester-response Select an API or configure manually to test.
+
+    script.
+      const APIs = !{JSON.stringify(apis)};
+
+      // Render API list
+      function renderApiList(filter = '') {
+        const container = document.getElementById('api-list');
+        const lower = filter.toLowerCase();
+        const filtered = APIs.filter(api =>
+          api.route.toLowerCase().includes(lower) ||
+          api.description.toLowerCase().includes(lower)
+        );
+
+        container.innerHTML = filtered.map((api, i) => `
+          <div class="api-item" onclick="toggleApi(${i})">
+            <div>
+              <span class="method ${api.method}">${api.method}</span>
+              <span class="api-header">${api.route}</span>
+            </div>
+            <div class="api-desc">${api.description}</div>
+            <div class="api-details">
+              ${api.body ? `<strong>Example Request Body:</strong><pre>${JSON.stringify(api.body, null, 2)}</pre>` : ''}
+              ${api.response ? `<strong>Example Response:</strong><pre>${JSON.stringify(api.response, null, 2)}</pre>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function toggleApi(index) {
+        const item = document.querySelectorAll('.api-item')[index];
+        const wasActive = item.classList.contains('active');
+        document.querySelectorAll('.api-item').forEach(el => el.classList.remove('active'));
+        if (!wasActive) { item.classList.add('active'); selectApi(index); }
+      }
+
+      function selectApi(index) {
+        const api = APIs[index];
+        document.getElementById('tester-method').value = api.method;
+        document.getElementById('tester-url').value = api.route;
+        document.getElementById('tester-headers').value = '{\n  "Content-Type": "application/json"\n}';
+        document.getElementById('tester-body').value = api.body ? JSON.stringify(api.body, null, 2) : '';
+        document.getElementById('tester-response').textContent = 'API loaded. Ready to send request 🚀';
+        document.getElementById('query-params-container').innerHTML = '';
+        addQueryParam();
+      }
+
+      function filterApis() { renderApiList(document.getElementById('api-search').value); }
+      function toggleAuth() {
+        const type = document.getElementById('auth-type').value;
+        document.getElementById('tester-token').style.display = type==='bearer'?'block':'none';
+        document.getElementById('basic-username').style.display = type==='basic'?'block':'none';
+        document.getElementById('basic-password').style.display = type==='basic'?'block':'none';
+      }
+
+      function addQueryParam(key='', value='') {
+        const container = document.getElementById('query-params-container');
+        const div = document.createElement('div'); div.className='param-row';
+        div.innerHTML = `<input type="text" placeholder="key" value="${key}"><input type="text" placeholder="value" value="${value}"><button type="button" class="remove-param" onclick="this.parentElement.remove()">−</button>`;
+        container.appendChild(div);
+      }
+
+      function getQueryString() {
+        const params = [];
+        document.querySelectorAll('#query-params-container .param-row').forEach(row => {
+          const keyInput = row.querySelector('input:first-child');
+          const valueInput = row.querySelector('input:last-child');
+
+          if (!keyInput || !valueInput) return; // skip if missing
+
+          const k = keyInput.value.trim();
+          const v = valueInput.value.trim();
+          if (k) params.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+        });
+        return params.length ? '?' + params.join('&') : '';
+      }
+
+
+      function getAuthHeader() {
+        const typeEl=document.getElementById('auth-type');
+        if(!typeEl) return {};
+        const type = typeEl.value;
+        if(type==='none') return {};
+        if(type==='bearer'){const t=document.getElementById('tester-token').value.trim(); return t?{Authorization:t.startsWith('Bearer')?t:`Bearer ${t}`}:{}}
+        if(type==='basic'){const u=document.getElementById('basic-username').value, p=document.getElementById('basic-password').value; return (u||p)?{Authorization:'Basic '+btoa(u+':'+p)}:{}}
+        return {};
+      }
+
+      async function runApiTester() {
+        const method=document.getElementById('tester-method').value;
+        let url=document.getElementById('tester-url').value.trim()+getQueryString();
+        const headersStr=document.getElementById('tester-headers').value;
+        const bodyStr=document.getElementById('tester-body').value.trim();
+        const respEl=document.getElementById('tester-response');
+        let headers={};
+        try{headers=headersStr?JSON.parse(headersStr):{}}catch{respEl.textContent='❌ Invalid headers JSON';return;}
+        Object.assign(headers,getAuthHeader());
+        const opts={method,headers};
+        if(method!=='GET' && bodyStr){try{opts.body=JSON.stringify(JSON.parse(bodyStr))}catch{respEl.textContent='❌ Invalid body JSON';return;}}
+        respEl.textContent='⏳ Sending request...';
+        try{
+          const res=await fetch(url,opts); const text=await res.text();
+          let output; try{output=JSON.stringify(JSON.parse(text),null,2)}catch{output=text;}
+          respEl.textContent=`Status: ${res.status} ${res.statusText}\n\n${output}`;
+          if(document.getElementById('auth-type').value==='bearer'){const t=document.getElementById('tester-token').value.trim(); if(t)localStorage.setItem('lastBearerToken',t);}
+        }catch(err){respEl.textContent='❌ '+err.message;}
+      }
+
+      function copyCurl() {
+        const method=document.getElementById('tester-method').value;
+        const url=document.getElementById('tester-url').value.trim()+getQueryString();
+        const headersStr=document.getElementById('tester-headers').value;
+        const bodyStr=document.getElementById('tester-body').value.trim();
+        let headers={}; try{headers=headersStr?JSON.parse(headersStr):{}}catch{}; Object.assign(headers,getAuthHeader());
+        let curl=`curl -X ${method} "${url}"`; for(const [k,v] of Object.entries(headers)){curl+=` \\\n  -H "${k}: ${v}"`}
+        if(method!=='GET'&&bodyStr){try{JSON.parse(bodyStr);curl+=` \\\n  -d '${bodyStr.replace(/'/g,"\\'")}'`}catch{}}
+        const el=document.getElementById('curl-command'); el.textContent=curl; el.style.display='block'; navigator.clipboard.writeText(curl); alert('cURL copied to clipboard!');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        renderApiList();
+        addQueryParam();
+
+        const saved = localStorage.getItem('lastBearerToken');
+        if (saved) {
+          const authSelect = document.getElementById('auth-type');
+          const tokenInput = document.getElementById('tester-token');
+          if(authSelect && tokenInput){
+            authSelect.value = 'bearer';
+            tokenInput.value = saved;
+            toggleAuth();
+          }
+        }
+      });

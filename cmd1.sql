@@ -1,11 +1,11 @@
-psql -U postgres
-\list
+psql -U postgres \list
 
 -- Connect
 \c <db_name>
 
 -- CREATE EXTENSION IF NOT EXISTS master_hr;
 CREATE SCHEMA IF NOT EXISTS master_hr;
+
 
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
@@ -38,3 +38,9 @@ https://www.canva.com/design/DAGQjSCN04I/5E1IRUJHAxJyV0O5G36rnw/edit
     price numeric (10, 2) check (price > 0),
     stock int check (stock >= 0),
  );
+
+CREATE TABLE master_products (
+    product_no integer NOT NULL,
+    name text NOT NULL,
+    price numeric
+);
