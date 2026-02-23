@@ -15,6 +15,7 @@ const ERROR = {
 export const MESSAGE = {
   USER_ALREADY_EXIST: 'User already exist',
   WRONG_CREDENTIALS: 'Wrong Credentials.',
+  INVALID_CREDENTIALS: 'Invalid Credentials.',
 };
 const VALIDATION = {};
 const EMAIL = {};

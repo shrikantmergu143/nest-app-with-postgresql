@@ -1,12 +1,6 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/shared/entity/base.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class Users extends BaseEntity {
@@ -24,6 +18,7 @@ export class Users extends BaseEntity {
   @Column({ type: 'character varying', unique: true })
   email: string;
 
+  @Exclude() // This decorator marks the field to be excluded during serialization
   @Column()
   password: string;
 

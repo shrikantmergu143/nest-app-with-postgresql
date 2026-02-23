@@ -36,8 +36,17 @@ export class UsersController {
   @Post('signup/user')
   async signUp(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
-      const user = await this.usersRepository.findOne({
-        where: [{ email: createUserDto?.email }],
+      if (createUserDto?.user_type == 'admin') {
+        return response?.errorResponse?.(
+          {
+            data: [],
+            message: MESSAGE.INVALID_CREDENTIALS,
+          },
+          res,
+        );
+      }
+      const user = await this.usersService.findOneEmail({
+        email: createUserDto?.email,
       });
       if (user) {
         response?.errorResponse?.(
@@ -119,7 +128,11 @@ export class UsersController {
         res,
       );
     } catch (error) {
-      return response.failureResponse(error, res);
+      console.log('error', error);
+      return response.errorResponse(
+        { message: MESSAGE.INVALID_CREDENTIALS, data: {} },
+        res,
+      );
     }
   }
   @Get('user/get')

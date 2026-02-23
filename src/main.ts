@@ -21,6 +21,7 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.setViewEngine('pug');
   app.setBaseViewsDir(join(__dirname, '../..', 'views'));
+  app.useStaticAssets(join(__dirname, '..', 'public'));
   app.use(urlencoded({ extended: true, limit: '50mb', parameterLimit: 50000 }));
   app.setGlobalPrefix('api');
   app.enableCors({

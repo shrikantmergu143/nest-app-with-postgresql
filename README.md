@@ -99,5 +99,12 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 migrations
 
-npm run migration:generate  src/migrations/generate
-npm run migration:up
+npm run migration:generate -- src/migrations/CreateUserTable
+npm run migration:run
+
+
+npm run migration:generate:production -- src/migrations/AddEmailToUser
+npm run migration:run:production
+
+npm run migration:revert
+npm run migration:revert:production

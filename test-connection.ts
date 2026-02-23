@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import AppDataSource from './config/data-source'; // Fixed path: ./config/ (no 'src/')
 
 async function testConnection() {

@@ -6,6 +6,10 @@
     {
       "include": "src/views/**/*",
       "outDir": "dist/views"
+    },
+    {
+      "include": "shared/scripts/**/*",
+      "outDir": "dist/src"
     }
   ],
   "compilerOptions": {
