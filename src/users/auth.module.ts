@@ -22,6 +22,6 @@ export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(validationMiddleware(userCreateSchema))
-      .forRoutes({ path: 'users', method: RequestMethod.POST });
+      .forRoutes({ path: 'user', method: RequestMethod.POST });
   }
 }

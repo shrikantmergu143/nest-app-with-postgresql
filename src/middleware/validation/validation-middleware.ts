@@ -1,3 +1,7 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as fs from 'fs';
 import { NextFunction, Request, Response } from 'express';
 import { ObjectSchema } from 'joi';

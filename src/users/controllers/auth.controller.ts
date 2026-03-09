@@ -3,7 +3,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-unsafe-optional-chaining */
-import { Body, Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserDto } from '../models/create-user.dto';
 import response from 'src/constants/response';
 import { Request, Response } from 'express';
@@ -16,7 +25,7 @@ import { LoginAdminDto } from '../models/admin-login.dto';
 import { Admin } from 'src/admin/entities/admin.entity';
 import { compareHash } from 'src/constants/utils';
 import * as jwt from 'jsonwebtoken';
-import { ApiDoc } from 'src/shared/decorators/api-doc.decorator';
+import { AuthGuard } from 'src/guard/auth-guard/auth.guard';
 
 @Controller('auth')
 export class UsersController {
@@ -28,8 +37,8 @@ export class UsersController {
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
   ) {}
-  generateToken = (id, table) => {
-    return jwt.sign({ id, table }, process.env.JWT_SECRET_KEY, {
+  generateToken = (id, user_type) => {
+    return jwt.sign({ id, user_type }, process.env.JWT_SECRET_KEY, {
       expiresIn: '365d',
     });
   };
@@ -70,19 +79,6 @@ export class UsersController {
     }
   }
   @Post('login/admin')
-  @ApiDoc({
-    description: 'Login Admin',
-    body: {
-      email: 'string',
-      password: 'string',
-      device_id: 'string',
-      device_type: 'string',
-    },
-    response: {
-      id: 'uuid',
-      email: 'string',
-    },
-  })
   async adminLogin(@Body() loginAdminDto: LoginAdminDto, @Res() res: Response) {
     try {
       const adminResponse = await this.adminRepository.findOne({
@@ -135,8 +131,10 @@ export class UsersController {
       );
     }
   }
+  @UseGuards(AuthGuard)
   @Get('user/get')
-  async getUser(@Req() user: Request, @Res() res: Response) {
+  async getUser(@Req() request: any, @Res() res: Response) {
+    console.log('user', request?.user);
     const result = await this.usersService.findAll();
     response.successResponse(
       {

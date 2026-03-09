@@ -24,3 +24,6 @@ nest g middleware middleware/_name
 
 GENERATE resource using resource name
 nest g resource admin
+
+Guard
+nest g guard guard/Auth
