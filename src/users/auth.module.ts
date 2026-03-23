@@ -11,11 +11,12 @@ import validationMiddleware from 'src/middleware/validation/validation-middlewar
 import { userCreateSchema } from './models/sign.validation';
 import { UsersService } from './services/auth.service';
 import { Admin } from 'src/admin/entities/admin.entity';
+import { UsersResolver } from './users.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Users, Admin])],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UsersResolver],
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {

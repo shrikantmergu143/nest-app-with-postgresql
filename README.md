@@ -108,3 +108,9 @@ npm run migration:run:production
 
 npm run migration:revert
 npm run migration:revert:production
+
+
+
+
+Graphql
+nest g resolver users --no-spec

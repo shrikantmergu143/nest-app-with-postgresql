@@ -12,6 +12,8 @@ import { CallGateway } from './call.gateway';
 import { AdminModule } from './admin/admin.module';
 import { DiscoveryModule } from '@nestjs/core';
 import { ApiDocsModule } from './shared/services/api.docs.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -25,6 +27,12 @@ import { ApiDocsModule } from './shared/services/api.docs.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => database(configService),
       inject: [ConfigService],
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      debug: true,
+      playground: true,
     }),
     UsersModule,
     AdminModule,

@@ -4,6 +4,7 @@ import { Users } from '../models/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../models/create-user.dto';
 import { hashPassword } from 'src/constants/utils';
+import { QueryOptions } from 'src/constants/query-interface';
 
 @Injectable()
 export class UsersService {
@@ -17,8 +18,13 @@ export class UsersService {
       password: password,
     });
   }
-  findAll(): Promise<Users[]> {
-    return this.usersRepository.find({ where: { status: 'active' } });
+  findAll(options?: QueryOptions<Users>): Promise<Users[]> {
+    return this.usersRepository.find({
+      where: { status: 'active' },
+      order: options?.sortBy
+        ? { [options?.sortBy]: options?.order }
+        : { created_at: 'DESC' },
+    });
   }
   findOne(data?: Users): Promise<Users> {
     return this.usersRepository.findOneBy(data);

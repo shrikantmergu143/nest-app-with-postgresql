@@ -43,25 +43,25 @@
     "migration:up:production": "env-cmd -f .env.production npm run migrate:up",
     "build:react": "vite build --config src/react-app/vite.config.mts",
     "start:react": "npm run build:react && nest start",
-
     "typeorm": "typeorm-ts-node-commonjs -d config/data-source.ts",
-
     "migrate:generate": "npm run typeorm -- migration:generate",
     "migrate:run": "npm run typeorm -- migration:run",
     "migrate:revert": "npm run typeorm -- migration:revert",
-
     "migration:generate": "env-cmd -f .env npm run migrate:generate",
     "migration:run": "env-cmd -f .env npm run migrate:run",
     "migration:revert": "env-cmd -f .env npm run migrate:revert",
-
     "migration:generate:production": "env-cmd -f .env.production npm run migrate:generate",
     "migration:run:production": "env-cmd -f .env.production npm run migrate:run",
     "migration:revert:production": "env-cmd -f .env.production npm run migrate:revert"
   },
   "dependencies": {
+    "@apollo/server": "^5.4.0",
+    "@as-integrations/express5": "^1.1.2",
+    "@nestjs/apollo": "^13.2.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/graphql": "^13.2.4",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.9",
@@ -70,6 +70,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "env-cmd": "^11.0.0",
+    "graphql": "^16.13.1",
     "helmet": "^8.1.0",
     "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.3",

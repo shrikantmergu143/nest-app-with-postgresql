@@ -32,6 +32,7 @@ yarn.lock
 logs
 *.log
 npm-debug.log*
+*/migrations/*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
